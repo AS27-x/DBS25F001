@@ -1,0 +1,86 @@
+﻿@model List<HospitalManagementSystem.Models.Bill>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-primary px-4">
+        <span class="navbar-brand fw-bold">🏥 Hospital Management System</span>
+        <div class="d-flex gap-3">
+            <a href="/Dashboard/Index" class="btn btn-outline-light btn-sm">🏠 Dashboard</a>
+            <a href="/Account/Logout" class="btn btn-outline-light btn-sm">Logout</a>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4>💰 Billing</h4>
+            <a href="/Bill/AddEdit" class="btn btn-primary">+ Add Bill</a>
+        </div>
+        <form method="get" action="/Bill/Index" class="mb-3 d-flex gap-2">
+            <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Search by patient or status..." />
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+            <a href="/Bill/Index" class="btn btn-outline-secondary">Clear</a>
+        </form>
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>#</th>
+                            <th>Patient</th>
+                            <th>Total Amount</th>
+                            <th>Paid Amount</th>
+                            <th>Balance</th>
+                            <th>Date</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count == 0)
+                        {
+                            <tr><td colspan="8" class="text-center text-muted py-4">No bills found.</td></tr>
+                        }
+                        @foreach (var b in Model)
+                        {
+                            <tr>
+                                <td>@b.BillID</td>
+                                <td>@b.PatientName</td>
+                                <td>Rs. @b.TotalAmount.ToString("N0")</td>
+                                <td>Rs. @b.PaidAmount.ToString("N0")</td>
+                                <td>Rs. @b.Balance.ToString("N0")</td>
+                                <td>@b.BillDate.ToString("dd MMM yyyy")</td>
+                                <td>
+                                    @if (b.Status == "Paid")
+                                    {
+                                        <span class="badge bg-success">Paid</span>
+                                    }
+                                    else if (b.Status == "Partial")
+                                    {
+                                        <span class="badge bg-warning text-dark">Partial</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Unpaid</span>
+                                    }
+                                </td>
+                                <td>
+                                    <a href="/Bill/AddEdit/@b.BillID" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="/Bill/Delete/@b.BillID" class="btn btn-sm btn-danger" onclick="return confirm('Delete this bill?')">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

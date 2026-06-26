@@ -1,0 +1,84 @@
+﻿@model List<HospitalManagementSystem.Models.Appointment>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointments</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-primary px-4">
+        <span class="navbar-brand fw-bold">🏥 Hospital Management System</span>
+        <div class="d-flex gap-3">
+            <a href="/Dashboard/Index" class="btn btn-outline-light btn-sm">🏠 Dashboard</a>
+            <a href="/Account/Logout" class="btn btn-outline-light btn-sm">Logout</a>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4>📅 Appointments</h4>
+            <a href="/Appointment/AddEdit" class="btn btn-primary">+ Add Appointment</a>
+        </div>
+        <form method="get" action="/Appointment/Index" class="mb-3 d-flex gap-2">
+            <input type="text" name="search" value="@ViewBag.Search" class="form-control" placeholder="Search by patient, doctor or status..." />
+            <button type="submit" class="btn btn-outline-primary">Search</button>
+            <a href="/Appointment/Index" class="btn btn-outline-secondary">Clear</a>
+        </form>
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <table class="table table-hover mb-0">
+                    <thead class="table-primary">
+                        <tr>
+                            <th>#</th>
+                            <th>Patient</th>
+                            <th>Doctor</th>
+                            <th>Date & Time</th>
+                            <th>Status</th>
+                            <th>Notes</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Count == 0)
+                        {
+                            <tr><td colspan="7" class="text-center text-muted py-4">No appointments found.</td></tr>
+                        }
+                        @foreach (var a in Model)
+                        {
+                            <tr>
+                                <td>@a.AppointmentID</td>
+                                <td>@a.PatientName</td>
+                                <td>Dr. @a.DoctorName</td>
+                                <td>@a.AppointmentDate.ToString("dd MMM yyyy hh:mm tt")</td>
+                                <td>
+                                    @if (a.Status == "Scheduled")
+                                    {
+                                        <span class="badge bg-primary">Scheduled</span>
+                                    }
+                                    else if (a.Status == "Completed")
+                                    {
+                                        <span class="badge bg-success">Completed</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger">Cancelled</span>
+                                    }
+                                </td>
+                                <td>@a.Notes</td>
+                                <td>
+                                    <a href="/Appointment/AddEdit/@a.AppointmentID" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="/Appointment/Delete/@a.AppointmentID" class="btn btn-sm btn-danger" onclick="return confirm('Delete this appointment?')">Delete</a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

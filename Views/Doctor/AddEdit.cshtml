@@ -1,0 +1,85 @@
+﻿@model HospitalManagementSystem.Models.Doctor
+@{
+    Layout = null;
+    bool isEdit = Model.DoctorID != 0;
+    var departments = ViewBag.Departments as List<HospitalManagementSystem.Models.Department> ?? new List<HospitalManagementSystem.Models.Department>();
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@(isEdit ? "Edit Doctor" : "Add Doctor")</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-primary px-4">
+        <span class="navbar-brand fw-bold">🏥 Hospital Management System</span>
+        <a href="/Doctor/Index" class="btn btn-outline-light btn-sm">Back to Doctors</a>
+    </nav>
+    <div class="container mt-4">
+        <div class="card shadow-sm mx-auto" style="max-width:650px">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">@(isEdit ? "Edit Doctor" : "Add New Doctor")</h5>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.Error</div>
+                }
+                <form method="post" action="/Doctor/AddEdit">
+                    <input type="hidden" name="DoctorID" value="@Model.DoctorID" />
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label fw-semibold">First Name</label>
+                            <input type="text" name="FirstName" value="@Model.FirstName" class="form-control" required />
+                        </div>
+                        <div class="col">
+                            <label class="form-label fw-semibold">Last Name</label>
+                            <input type="text" name="LastName" value="@Model.LastName" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Specialization</label>
+                        <input type="text" name="Specialization" value="@Model.Specialization" class="form-control" required />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Department</label>
+                        <select name="DeptID" class="form-select">
+                            <option value="0">-- Select Department --</option>
+                            @foreach (var dept in departments)
+                            {
+                                <option value="@dept.DeptID">@dept.DeptName</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label fw-semibold">Contact Number</label>
+                            <input type="text" name="ContactNumber" value="@Model.ContactNumber" class="form-control" required />
+                        </div>
+                        <div class="col">
+                            <label class="form-label fw-semibold">Email</label>
+                            <input type="email" name="Email" value="@Model.Email" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Salary</label>
+                        <input type="number" name="Salary" value="@Model.Salary" class="form-control" step="0.01" />
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">@(isEdit ? "Update Doctor" : "Add Doctor")</button>
+                        <a href="/Doctor/Index" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

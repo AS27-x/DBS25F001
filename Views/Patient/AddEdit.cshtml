@@ -1,0 +1,108 @@
+﻿@model HospitalManagementSystem.Models.Patient
+@{
+    Layout = null;
+    bool isEdit = Model.PatientID != 0;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@(isEdit ? "Edit Patient" : "Add Patient")</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-primary px-4">
+        <span class="navbar-brand fw-bold">🏥 Hospital Management System</span>
+        <a href="/Patient/Index" class="btn btn-outline-light btn-sm">Back to Patients</a>
+    </nav>
+
+    <div class="container mt-4">
+        <div class="card shadow-sm mx-auto" style="max-width:650px">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">@(isEdit ? "Edit Patient" : "Add New Patient")</h5>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.Error != null)
+                {
+                    <div class="alert alert-danger">@ViewBag.Error</div>
+                }
+                <form method="post" action="/Patient/AddEdit">
+                    <input type="hidden" name="PatientID" value="@Model.PatientID" />
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label fw-semibold">First Name</label>
+                            <input type="text" name="FirstName" value="@Model.FirstName" class="form-control" required />
+                        </div>
+                        <div class="col">
+                            <label class="form-label fw-semibold">Last Name</label>
+                            <input type="text" name="LastName" value="@Model.LastName" class="form-control" required />
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label fw-semibold">Date of Birth</label>
+                            <input type="date" name="DateOfBirth" value="@Model.DateOfBirth.ToString("yyyy-MM-dd")" class="form-control" required />
+                        </div>
+                        <div class="col">
+                            <label class="form-label fw-semibold">Gender</label>
+                            <div class="mt-2">
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Gender" value="M" />
+                                    <label class="form-check-label">Male</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Gender" value="F" />
+                                    <label class="form-check-label">Female</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Gender" value="O" />
+                                    <label class="form-check-label">Other</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-3">
+                        <div class="col">
+                            <label class="form-label fw-semibold">Contact Number</label>
+                            <input type="text" name="ContactNumber" value="@Model.ContactNumber" class="form-control" placeholder="03xxxxxxxxx" />
+                        </div>
+                        <div class="col">
+                            <label class="form-label fw-semibold">Blood Group</label>
+                            <select name="BloodGroup" class="form-select">
+                                <option value="">-- Select --</option>
+                                <option value="A+">A+</option>
+                                <option value="A-">A-</option>
+                                <option value="B+">B+</option>
+                                <option value="B-">B-</option>
+                                <option value="O+">O+</option>
+                                <option value="O-">O-</option>
+                                <option value="AB+">AB+</option>
+                                <option value="AB-">AB-</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Address</label>
+                        <textarea name="Address" class="form-control" rows="2" placeholder="Enter full address">@Model.Address</textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Emergency Contact</label>
+                        <input type="text" name="EmergencyContact" value="@Model.EmergencyContact" class="form-control" placeholder="Emergency contact number" />
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">@(isEdit ? "Update Patient" : "Add Patient")</button>
+                        <a href="/Patient/Index" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
